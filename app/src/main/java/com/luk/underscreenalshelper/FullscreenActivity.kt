@@ -37,8 +37,26 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
             canvas?.drawCircle(SIZE, SIZE, SIZE, paint)
         }
 
+        override fun toString(): String {
+            val center = getCenter()
+            return "Circle{x: ${center.first}, y: ${center.second}}"
+        }
+
+        fun getCenter(): Pair<Float, Float> {
+            return Pair(x + SIZE, y + SIZE)
+        }
+
+        fun setCenter(x: Float?, y: Float?) {
+            if (x != null) {
+                this.x = x - SIZE
+            }
+            if (y != null) {
+                this.y = y - SIZE
+            }
+        }
+
         companion object {
-            const val SIZE = 40.0f
+            private const val SIZE = 40.0f
         }
     }
 
@@ -58,8 +76,10 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
         }
 
         circle = Circle(this)
-        circle.x = (resources.displayMetrics.widthPixels.toFloat() - Circle.SIZE) / 2
-        circle.y = (resources.displayMetrics.heightPixels.toFloat() - Circle.SIZE) / 2
+        circle.setCenter(
+            resources.displayMetrics.widthPixels.toFloat() / 2,
+            resources.displayMetrics.heightPixels.toFloat() / 2
+        )
 
         val doubleTapDetector = GestureDetector(this, object : SimpleOnGestureListener() {
             override fun onDoubleTap(e: MotionEvent): Boolean {
@@ -68,12 +88,15 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
                     val valueX = view.findViewById<EditText>(R.id.value_x)
                     val valueY = view.findViewById<EditText>(R.id.value_y)
 
-                    valueX.setText(circle.x.toString())
-                    valueY.setText(circle.y.toString())
+                    val center = circle.getCenter()
+                    valueX.setText(center.first.toString())
+                    valueY.setText(center.second.toString())
 
                     setPositiveButton(android.R.string.ok) { dialog, _ ->
-                        valueX.text.toString().toFloatOrNull()?.let { circle.x = it }
-                        valueY.text.toString().toFloatOrNull()?.let { circle.y = it }
+                        circle.setCenter(
+                            valueX.text.toString().toFloatOrNull()!!,
+                            valueY.text.toString().toFloatOrNull()!!
+                        )
                         dialog.dismiss()
                     }
 
@@ -121,6 +144,6 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     fun updateStatusText() {
-        binding.status.text = "lux: ${lux}\n(x: ${circle.x.toInt()}, y: ${circle.y.toInt()})"
+        binding.status.text = "lux: ${lux}\n${circle}"
     }
 }
