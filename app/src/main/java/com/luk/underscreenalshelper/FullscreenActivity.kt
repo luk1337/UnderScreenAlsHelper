@@ -39,7 +39,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
         override fun toString(): String {
             val center = getCenter()
-            return "Circle{x: ${center.first}, y: ${center.second}}"
+            return "Circle{x: ${center.first.toInt()}, y: ${center.second.toInt()}}"
         }
 
         fun getCenter(): Pair<Float, Float> {
