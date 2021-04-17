@@ -63,10 +63,21 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
         circle.x = (resources.displayMetrics.widthPixels.toFloat() - Circle.SIZE) / 2
         circle.y = (resources.displayMetrics.heightPixels.toFloat() - Circle.SIZE) / 2
 
+        var touchCoordinates = Pair(circle.x, circle.y)
+
         binding.frame.addView(circle)
         binding.frame.setOnTouchListener { _: View, motionEvent: MotionEvent ->
-            circle.x = motionEvent.x
-            circle.y = motionEvent.y
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_UP -> {
+                    touchCoordinates = Pair(motionEvent.x, motionEvent.y)
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    circle.x -= touchCoordinates.first - motionEvent.x
+                    circle.y -= touchCoordinates.second - motionEvent.y
+                    touchCoordinates = Pair(motionEvent.x, motionEvent.y)
+                }
+            }
+
             updateStatusText()
             return@setOnTouchListener true
         }
