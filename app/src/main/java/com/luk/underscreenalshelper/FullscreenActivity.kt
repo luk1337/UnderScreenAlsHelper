@@ -14,7 +14,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.luk.underscreenalshelper.databinding.ActivityFullscreenBinding
 
@@ -22,7 +21,6 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var binding: ActivityFullscreenBinding
     private lateinit var circle: Circle
-    private lateinit var status: TextView
 
     private var lux = 0.0f
 
@@ -82,8 +80,6 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
             return@setOnTouchListener true
         }
 
-        status = binding.status
-
         val sensorManager = getSystemService(SensorManager::class.java)
         val light = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         sensorManager.registerListener(this, light, SensorManager.SENSOR_DELAY_FASTEST)
@@ -100,6 +96,6 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     fun updateStatusText() {
-        status.text = "lux: ${lux}\n(x: ${circle.x.toInt()}, y: ${circle.y.toInt()})"
+        binding.status.text = "lux: ${lux}\n(x: ${circle.x.toInt()}, y: ${circle.y.toInt()})"
     }
 }
