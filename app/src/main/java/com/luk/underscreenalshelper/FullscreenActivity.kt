@@ -10,10 +10,10 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowInsetsController
+import android.view.*
+import android.view.GestureDetector.SimpleOnGestureListener
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.luk.underscreenalshelper.databinding.ActivityFullscreenBinding
 
@@ -61,6 +61,30 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
         circle.x = (resources.displayMetrics.widthPixels.toFloat() - Circle.SIZE) / 2
         circle.y = (resources.displayMetrics.heightPixels.toFloat() - Circle.SIZE) / 2
 
+        val doubleTapDetector = GestureDetector(this, object : SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                AlertDialog.Builder(this@FullscreenActivity).apply {
+                    val view = layoutInflater.inflate(R.layout.dialog_set_coordinates, null)
+                    val valueX = view.findViewById<EditText>(R.id.value_x)
+                    val valueY = view.findViewById<EditText>(R.id.value_y)
+
+                    valueX.setText(circle.x.toString())
+                    valueY.setText(circle.y.toString())
+
+                    setPositiveButton(android.R.string.ok) { dialog, _ ->
+                        valueX.text.toString().toFloatOrNull()?.let { circle.x = it }
+                        valueY.text.toString().toFloatOrNull()?.let { circle.y = it }
+                        dialog.dismiss()
+                    }
+
+                    setTitle(R.string.set_coordinates)
+                    setView(view)
+                    create()
+                    show()
+                }
+                return true
+            }
+        })
         var touchCoordinates = Pair(circle.x, circle.y)
 
         binding.frame.addView(circle)
@@ -77,6 +101,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
             }
 
             updateStatusText()
+            doubleTapDetector.onTouchEvent(motionEvent)
             return@setOnTouchListener true
         }
 
