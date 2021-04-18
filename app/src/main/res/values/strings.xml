@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">UnderScreenAlsHelper</string>
-    <string name="set_coordinates">Set coordinates</string>
+
     <string name="scan_mode_on">Starting scan mode</string>
     <string name="scan_mode_off">Stopping scan mode</string>
+
+    <string name="set_coordinates">Set coordinates</string>
+    <string name="circle_x">Circle X</string>
+    <string name="circle_y">Circle Y</string>
+    <string name="scan_mode_min_x">Scan mode min X</string>
+    <string name="scan_mode_min_y">Scan mode min Y</string>
+    <string name="scan_mode_step">Scan mode step</string>
 </resources>

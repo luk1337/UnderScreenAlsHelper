@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.luk.underscreenalshelper.databinding.ActivityFullscreenBinding
+import com.luk.underscreenalshelper.databinding.DialogSetCoordinatesBinding
 
 class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
@@ -29,19 +30,30 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
     data class ScanMode(
         var enabled: Boolean = false,
         var lux: Float = 0.0f,
-        var pos: Pair<Float, Float> = Pair(0.0f, 0.0f)
+        var pos: Pair<Float, Float> = Pair(0.0f, 0.0f),
+        var minX: Float = 0.0f,
+        var minY: Float = 0.0f,
+        var step: Float = 10.0f
     ) {
         fun reset() {
             lux = 0.0f
             pos = Pair(0.0f, 0.0f)
         }
 
-        override fun toString(): String {
-            return "ScanMode{enabled: ${enabled}, lux: $lux, pos: $pos}"
+        fun setPrefs(minX: Float?, minY: Float?, step: Float?) {
+            if (minX != null) {
+                this.minX = minX
+            }
+            if (minY != null) {
+                this.minY = minY
+            }
+            if (step != null) {
+                this.step = step
+            }
         }
 
-        companion object {
-            const val STEP = 10.0f
+        override fun toString(): String {
+            return "ScanMode{enabled: ${enabled}, lux: $lux, pos: $pos}"
         }
     }
 
@@ -109,24 +121,31 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
         val doubleTapDetector = GestureDetector(this, object : SimpleOnGestureListener() {
             override fun onDoubleTap(e: MotionEvent): Boolean {
                 AlertDialog.Builder(this@FullscreenActivity).apply {
-                    val view = layoutInflater.inflate(R.layout.dialog_set_coordinates, null)
-                    val valueX = view.findViewById<EditText>(R.id.value_x)
-                    val valueY = view.findViewById<EditText>(R.id.value_y)
+                    val view = DialogSetCoordinatesBinding.inflate(layoutInflater)
 
                     val center = circle.getCenter()
-                    valueX.setText(center.first.toString())
-                    valueY.setText(center.second.toString())
+                    view.circleX.setText(center.first.toString())
+                    view.circleY.setText(center.second.toString())
+
+                    view.scanModeMinX.setText(scanMode.minX.toString())
+                    view.scanModeMinY.setText(scanMode.minY.toString())
+                    view.scanModeStep.setText(scanMode.step.toString())
 
                     setPositiveButton(android.R.string.ok) { dialog, _ ->
                         circle.setCenter(
-                            valueX.text.toString().toFloatOrNull()!!,
-                            valueY.text.toString().toFloatOrNull()!!
+                            view.circleX.text.toString().toFloatOrNull()!!,
+                            view.circleY.text.toString().toFloatOrNull()!!
+                        )
+                        scanMode.setPrefs(
+                            view.scanModeMinX.text.toString().toFloatOrNull()!!,
+                            view.scanModeMinY.text.toString().toFloatOrNull()!!,
+                            view.scanModeStep.text.toString().toFloatOrNull()!!
                         )
                         dialog.dismiss()
                     }
 
                     setTitle(R.string.set_coordinates)
-                    setView(view)
+                    setView(view.root)
                     create()
                     show()
                 }
@@ -147,7 +166,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
                         R.string.scan_mode_on,
                         Toast.LENGTH_SHORT
                     ).show()
-                    circle.setCenter(0.0f, 0.0f)
+                    circle.setCenter(scanMode.minX, scanMode.minY)
                     scanMode.reset()
                 }
 
@@ -202,14 +221,14 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
         }
         when {
             circle.x > resources.displayMetrics.widthPixels.toFloat() -> {
-                circle.x = 0.0f
-                circle.y += ScanMode.STEP
+                circle.x = scanMode.minX
+                circle.y += scanMode.step
             }
             circle.y > resources.displayMetrics.heightPixels.toFloat() -> {
                 scanMode.enabled = false
             }
             else -> {
-                circle.x += ScanMode.STEP
+                circle.x += scanMode.step
             }
         }
     }
