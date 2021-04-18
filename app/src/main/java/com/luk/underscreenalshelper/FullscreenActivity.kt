@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.luk.underscreenalshelper.databinding.ActivityFullscreenBinding
@@ -23,6 +24,26 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var circle: Circle
 
     private var lux = 0.0f
+    private var scanMode = ScanMode()
+
+    data class ScanMode(
+        var enabled: Boolean = false,
+        var lux: Float = 0.0f,
+        var pos: Pair<Float, Float> = Pair(0.0f, 0.0f)
+    ) {
+        fun reset() {
+            lux = 0.0f
+            pos = Pair(0.0f, 0.0f)
+        }
+
+        override fun toString(): String {
+            return "ScanMode{enabled: ${enabled}, lux: $lux, pos: $pos}"
+        }
+
+        companion object {
+            const val STEP = 10.0f
+        }
+    }
 
     internal class Circle(context: Context) : View(context) {
         private val paint: Paint = Paint()
@@ -55,6 +76,13 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
             }
         }
 
+        fun reset() {
+            setCenter(
+                resources.displayMetrics.widthPixels.toFloat() / 2,
+                resources.displayMetrics.heightPixels.toFloat() / 2
+            )
+        }
+
         companion object {
             private const val SIZE = 40.0f
         }
@@ -76,10 +104,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
         }
 
         circle = Circle(this)
-        circle.setCenter(
-            resources.displayMetrics.widthPixels.toFloat() / 2,
-            resources.displayMetrics.heightPixels.toFloat() / 2
-        )
+        circle.reset()
 
         val doubleTapDetector = GestureDetector(this, object : SimpleOnGestureListener() {
             override fun onDoubleTap(e: MotionEvent): Boolean {
@@ -106,6 +131,27 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
                     show()
                 }
                 return true
+            }
+
+            override fun onLongPress(e: MotionEvent?) {
+                if (scanMode.enabled) {
+                    Toast.makeText(
+                        this@FullscreenActivity,
+                        R.string.scan_mode_off,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    circle.reset()
+                } else {
+                    Toast.makeText(
+                        this@FullscreenActivity,
+                        R.string.scan_mode_on,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    circle.setCenter(0.0f, 0.0f)
+                    scanMode.reset()
+                }
+
+                scanMode.enabled = !scanMode.enabled
             }
         })
         var touchCoordinates = Pair(circle.x, circle.y)
@@ -135,6 +181,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         lux = event?.values?.get(0)!!
+        updateScanModeData()
         updateStatusText()
     }
 
@@ -143,7 +190,27 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
     }
 
     @SuppressLint("SetTextI18n")
-    fun updateStatusText() {
-        binding.status.text = "lux: ${lux}\n${circle}"
+    private fun updateStatusText() {
+        binding.status.text = "lux: ${lux}\n${circle}\n${scanMode}"
+    }
+
+    private fun updateScanModeData() {
+        if (!scanMode.enabled) return;
+        if (lux > scanMode.lux) {
+            scanMode.lux = lux
+            scanMode.pos = circle.getCenter()
+        }
+        when {
+            circle.x > resources.displayMetrics.widthPixels.toFloat() -> {
+                circle.x = 0.0f
+                circle.y += ScanMode.STEP
+            }
+            circle.y > resources.displayMetrics.heightPixels.toFloat() -> {
+                scanMode.enabled = false
+            }
+            else -> {
+                circle.x += ScanMode.STEP
+            }
+        }
     }
 }
