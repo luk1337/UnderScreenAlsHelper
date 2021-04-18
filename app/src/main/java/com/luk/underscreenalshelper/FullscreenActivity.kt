@@ -229,16 +229,19 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
     private fun updateScanModeData() {
         if (!scanMode.enabled) return;
+
+        val center = circle.getCenter()
+
         if (lux > scanMode.lux) {
             scanMode.lux = lux
-            scanMode.pos = circle.getCenter()
+            scanMode.pos = center
         }
+
         when {
-            circle.x > scanMode.maxX -> {
-                circle.x = scanMode.minX
-                circle.y += scanMode.step
+            center.first > scanMode.maxX -> {
+                circle.setCenter(scanMode.minX, center.second + scanMode.step)
             }
-            circle.y > scanMode.maxY -> {
+            center.second > scanMode.maxY -> {
                 scanMode.enabled = false
             }
             else -> {
