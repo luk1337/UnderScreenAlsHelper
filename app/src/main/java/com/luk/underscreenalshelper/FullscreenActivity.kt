@@ -238,11 +238,11 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
         }
 
         when {
-            center.first > scanMode.maxX -> {
-                circle.setCenter(scanMode.minX, center.second + scanMode.step)
-            }
-            center.second > scanMode.maxY -> {
+            center.first == scanMode.maxX && center.second == scanMode.maxY -> {
                 scanMode.enabled = false
+            }
+            center.first == scanMode.maxX -> {
+                circle.setCenter(scanMode.minX, center.second + scanMode.step)
             }
             else -> {
                 circle.x += scanMode.step
