@@ -9,5 +9,7 @@
     <string name="circle_y">Circle Y</string>
     <string name="scan_mode_min_x">Scan mode min X</string>
     <string name="scan_mode_min_y">Scan mode min Y</string>
+    <string name="scan_mode_max_x">Scan mode max X</string>
+    <string name="scan_mode_max_y">Scan mode max Y</string>
     <string name="scan_mode_step">Scan mode step</string>
 </resources>
