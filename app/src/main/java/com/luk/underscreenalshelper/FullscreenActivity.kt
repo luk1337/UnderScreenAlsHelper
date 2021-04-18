@@ -144,7 +144,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
                         dialog.dismiss()
                     }
 
-                    setTitle(R.string.set_coordinates)
+                    setTitle(R.string.settings)
                     setView(view.root)
                     create()
                     show()
