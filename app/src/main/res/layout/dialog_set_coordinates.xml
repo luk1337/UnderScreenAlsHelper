@@ -15,7 +15,9 @@
             android:id="@+id/circle_x"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/circle_x" />
+            android:hint="@string/circle_x"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -26,7 +28,9 @@
             android:id="@+id/circle_y"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/circle_y" />
+            android:hint="@string/circle_y"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -37,7 +41,9 @@
             android:id="@+id/scan_mode_min_x"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/scan_mode_min_x" />
+            android:hint="@string/scan_mode_min_x"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -48,7 +54,9 @@
             android:id="@+id/scan_mode_min_y"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/scan_mode_min_y" />
+            android:hint="@string/scan_mode_min_y"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -59,7 +67,9 @@
             android:id="@+id/scan_mode_max_x"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/scan_mode_max_x" />
+            android:hint="@string/scan_mode_max_x"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -70,7 +80,9 @@
             android:id="@+id/scan_mode_max_y"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/scan_mode_max_y" />
+            android:hint="@string/scan_mode_max_y"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -81,6 +93,8 @@
             android:id="@+id/scan_mode_step"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/scan_mode_step" />
+            android:hint="@string/scan_mode_step"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>
