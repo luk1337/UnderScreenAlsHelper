@@ -5,6 +5,7 @@
     <string name="scan_mode_off">Stopping scan mode</string>
 
     <string name="settings">Settings</string>
+    <string name="circle_size">Circle size</string>
     <string name="circle_x">Circle X</string>
     <string name="circle_y">Circle Y</string>
     <string name="scan_mode_min_x">Scan mode min X</string>

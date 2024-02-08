@@ -66,6 +66,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
     internal class Circle(context: Context) : View(context) {
         private val paint: Paint = Paint()
+        var size: Float = 0.0f
 
         init {
             paint.color = Color.WHITE
@@ -74,7 +75,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
 
         override fun onDraw(canvas: Canvas?) {
             super.onDraw(canvas)
-            canvas?.drawCircle(SIZE, SIZE, SIZE, paint)
+            canvas?.drawCircle(size, size, size, paint)
         }
 
         override fun toString(): String {
@@ -83,27 +84,24 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
         }
 
         fun getCenter(): Pair<Float, Float> {
-            return Pair(x + SIZE, y + SIZE)
+            return Pair(x + size, y + size)
         }
 
         fun setCenter(x: Float?, y: Float?) {
             if (x != null) {
-                this.x = x - SIZE
+                this.x = x - size
             }
             if (y != null) {
-                this.y = y - SIZE
+                this.y = y - size
             }
         }
 
         fun reset() {
+            size = 40.0f
             setCenter(
                 resources.displayMetrics.widthPixels.toFloat() / 2,
                 resources.displayMetrics.heightPixels.toFloat() / 2
             )
-        }
-
-        companion object {
-            private const val SIZE = 40.0f
         }
     }
 
@@ -133,6 +131,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
                 AlertDialog.Builder(this@FullscreenActivity).apply {
                     val view = DialogSetCoordinatesBinding.inflate(layoutInflater)
 
+                    view.circleSize.setText(circle.size.toString())
                     val center = circle.getCenter()
                     view.circleX.setText(center.first.toString())
                     view.circleY.setText(center.second.toString())
@@ -144,6 +143,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
                     view.scanModeStep.setText(scanMode.step.toString())
 
                     setPositiveButton(android.R.string.ok) { dialog, _ ->
+                        circle.size = view.circleSize.text.toString().toFloatOrNull()!!
                         circle.setCenter(
                             view.circleX.text.toString().toFloatOrNull()!!,
                             view.circleY.text.toString().toFloatOrNull()!!
