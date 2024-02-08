@@ -4,7 +4,7 @@
     android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@android:color/black"
     android:theme="@style/ThemeOverlay.UnderScreenAlsHelper.FullscreenContainer"
     tools:context=".FullscreenActivity">
 
@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:gravity="center|bottom"
         android:keepScreenOn="true"
-        android:textColor="@color/gray"
+        android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
         android:textStyle="bold" />
 </FrameLayout>
