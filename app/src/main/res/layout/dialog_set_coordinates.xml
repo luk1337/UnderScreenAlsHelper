@@ -51,6 +51,20 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/circle_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/circle_color"
+            android:digits="0123456789ABCDEF"
+            android:maxLength="6"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
             android:id="@+id/scan_mode_min_x"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

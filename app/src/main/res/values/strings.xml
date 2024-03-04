@@ -8,6 +8,7 @@
     <string name="circle_size">Circle size</string>
     <string name="circle_x">Circle X</string>
     <string name="circle_y">Circle Y</string>
+    <string name="circle_color">Circle color</string>
     <string name="scan_mode_min_x">Scan mode min X</string>
     <string name="scan_mode_min_y">Scan mode min Y</string>
     <string name="scan_mode_max_x">Scan mode max X</string>

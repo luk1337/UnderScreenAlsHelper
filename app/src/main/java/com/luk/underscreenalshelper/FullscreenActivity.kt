@@ -96,6 +96,17 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
             }
         }
 
+        fun getColor(): String {
+            return Integer.toHexString(paint.color).substring(2)
+        }
+
+        fun setColor(color: String) {
+            if (color.length < 6)
+                this.paint.color = Color.WHITE
+            else
+                this.paint.color = Color.parseColor("#$color")
+        }
+
         fun reset() {
             size = 40.0f
             setCenter(
@@ -135,6 +146,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
                     val center = circle.getCenter()
                     view.circleX.setText(center.first.toString())
                     view.circleY.setText(center.second.toString())
+                    view.circleColor.setText(circle.getColor())
 
                     view.scanModeMinX.setText(scanMode.minX.toString())
                     view.scanModeMinY.setText(scanMode.minY.toString())
@@ -148,6 +160,7 @@ class FullscreenActivity : AppCompatActivity(), SensorEventListener {
                             view.circleX.text.toString().toFloatOrNull()!!,
                             view.circleY.text.toString().toFloatOrNull()!!
                         )
+                        circle.setColor(view.circleColor.text.toString())
                         scanMode.setPrefs(
                             view.scanModeMinX.text.toString().toFloatOrNull()!!,
                             view.scanModeMinY.text.toString().toFloatOrNull()!!,
